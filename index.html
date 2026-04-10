@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ILYA Services — خدمات الذكاء الاصطناعي</title>
+  <meta name="description" content="منصة ILYA لخدمات الذكاء الاصطناعي — دردشة، صور، فيديو">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ -->
+<!--              CANVAS BACKGROUND          -->
+<!-- ═══════════════════════════════════════ -->
+<canvas id="bg-canvas"></canvas>
+<div id="particle-overlay"></div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--              LOADING SCREEN             -->
+<!-- ═══════════════════════════════════════ -->
+<div id="screen-loading" class="screen active">
+  <div class="loading-frame">
+    <div class="loading-corner tl"></div>
+    <div class="loading-corner tr"></div>
+    <div class="loading-corner bl"></div>
+    <div class="loading-corner br"></div>
+    <div class="loading-scan-line"></div>
+    <div class="loading-inner">
+      <div class="loading-logo-wrap">
+        <div class="loading-logo-ring ring-1"></div>
+        <div class="loading-logo-ring ring-2"></div>
+        <div class="loading-logo-ring ring-3"></div>
+        <img src="https://iili.io/B04MxcX.md.jpg" alt="ILYA" class="loading-logo-img" id="loading-logo">
+        <div class="loading-logo-scan"></div>
+      </div>
+      <div class="loading-title">
+        <span class="loading-title-ilya">ILYA</span>
+        <span class="loading-title-sub">SERVICES</span>
+      </div>
+      <div class="loading-tagline">نظام الذكاء الاصطناعي المتكامل</div>
+      <div class="loading-bar-container">
+        <div class="loading-bar-track">
+          <div class="loading-bar-fill" id="loading-bar"></div>
+          <div class="loading-bar-lightning"></div>
+          <div class="loading-bar-smoke"></div>
+        </div>
+        <div class="loading-percent" id="loading-percent">0%</div>
+      </div>
+      <div class="loading-status" id="loading-status">جاري التهيئة...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--               AUTH SCREEN              -->
+<!-- ═══════════════════════════════════════ -->
+<div id="screen-auth" class="screen">
+  <div class="auth-container">
+    <div class="auth-logo-area">
+      <img src="https://iili.io/B04MxcX.md.jpg" alt="ILYA" class="auth-logo">
+      <div class="auth-title">ILYA SERVICES</div>
+      <div class="auth-subtitle">منصة خدمات الذكاء الاصطناعي</div>
+    </div>
+    
+    <!-- Auth Choice -->
+    <div id="auth-choice" class="auth-panel active">
+      <button class="glass-btn primary-btn" onclick="App.showRegister()">
+        <span class="btn-icon">✦</span>
+        <span>إنشاء حساب جديد</span>
+      </button>
+      <button class="glass-btn secondary-btn" onclick="App.showLogin()">
+        <span class="btn-icon">◈</span>
+        <span>لدي حساب</span>
+      </button>
+    </div>
+    
+    <!-- Register Form -->
+    <div id="auth-register" class="auth-panel">
+      <div class="glass-card auth-form-card">
+        <div class="auth-form-title">إنشاء حساب</div>
+        <div class="input-group">
+          <input type="text" id="reg-name" class="glass-input" placeholder="الاسم الكامل" autocomplete="off">
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <input type="text" id="reg-user" class="glass-input" placeholder="اسم المستخدم (4 أحرف+)" autocomplete="off" dir="ltr">
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <input type="password" id="reg-pass" class="glass-input" placeholder="كلمة المرور" autocomplete="new-password">
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <input type="password" id="reg-confirm" class="glass-input" placeholder="تأكيد كلمة المرور" autocomplete="new-password">
+          <div class="input-line"></div>
+        </div>
+        <div class="auth-error" id="reg-error"></div>
+        <button class="glass-btn primary-btn full-width" onclick="App.doRegister()">
+          <span class="btn-icon">⬡</span>إنشاء الحساب
+        </button>
+        <button class="glass-btn ghost-btn full-width" onclick="App.showChoice()">
+          <span>→ رجوع</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Login Form -->
+    <div id="auth-login" class="auth-panel">
+      <div class="glass-card auth-form-card">
+        <div class="auth-form-title">تسجيل الدخول</div>
+        <div class="input-group">
+          <input type="text" id="log-user" class="glass-input" placeholder="اسم المستخدم" autocomplete="off" dir="ltr">
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <input type="password" id="log-pass" class="glass-input" placeholder="كلمة المرور" autocomplete="current-password">
+          <div class="input-line"></div>
+        </div>
+        <div class="auth-error" id="log-error"></div>
+        <button class="glass-btn primary-btn full-width" onclick="App.doLogin()">
+          <span class="btn-icon">◈</span>دخول
+        </button>
+        <button class="glass-btn ghost-btn full-width" onclick="App.showChoice()">
+          <span>→ رجوع</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--               MAIN APP                  -->
+<!-- ═══════════════════════════════════════ -->
+<div id="screen-app" class="screen">
+
+  <!-- SIDEBAR OVERLAY -->
+  <div id="sidebar-overlay" onclick="App.closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <img src="https://iili.io/B04Wttf.md.jpg" alt="Menu" class="sidebar-logo" onerror="this.src='https://iili.io/B04MxcX.md.jpg'">
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebar-name">—</div>
+        <div class="sidebar-user-id" id="sidebar-uid">ID: —</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-btn" onclick="App.navigate('account')">
+        <span class="sidebar-btn-icon">◉</span>
+        <span>حسابي</span>
+      </button>
+      <button class="sidebar-btn" onclick="App.navigate('help')">
+        <span class="sidebar-btn-icon">◎</span>
+        <span>المساعدة</span>
+      </button>
+      <button class="sidebar-btn" onclick="App.navigate('support')">
+        <span class="sidebar-btn-icon">◆</span>
+        <span>الدعم</span>
+      </button>
+      <button class="sidebar-btn" onclick="App.navigate('chat')">
+        <span class="sidebar-btn-icon">◈</span>
+        <span>الدردشة الذكية</span>
+      </button>
+      <button class="sidebar-btn" onclick="App.navigate('image')">
+        <span class="sidebar-btn-icon">⬡</span>
+        <span>توليد الصور</span>
+      </button>
+      <button class="sidebar-btn" onclick="App.navigate('video')">
+        <span class="sidebar-btn-icon">▶</span>
+        <span>توليد الفيديو</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-btn danger-btn" onclick="App.logout()">
+        <span class="sidebar-btn-icon">⏻</span>
+        <span>تسجيل الخروج</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <button class="hamburger" id="hamburger-btn" onclick="App.toggleSidebar()" aria-label="القائمة">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="topbar-title" id="topbar-title">ILYA SERVICES</div>
+    <div class="topbar-actions">
+      <!-- Admin Button - only shown for developer -->
+      <button class="admin-btn hidden" id="admin-btn" onclick="App.navigate('admin')" title="لوحة التحكم">⚙</button>
+      <div class="user-avatar-small" id="topbar-avatar">
+        <img src="https://iili.io/B04MxcX.md.jpg" alt="avatar">
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN TOPBAR (only developer) -->
+  <div class="admin-topbar hidden" id="admin-topbar">
+    <button class="admin-tab-btn active" onclick="App.adminTab('stats')" data-tab="stats">📊 إحصائيات</button>
+    <button class="admin-tab-btn" onclick="App.adminTab('users')" data-tab="users">👥 المستخدمون</button>
+    <button class="admin-tab-btn" onclick="App.adminTab('blocked')" data-tab="blocked">🚫 المحظورون</button>
+    <button class="admin-tab-btn" onclick="App.adminTab('messages')" data-tab="messages">📨 الرسائل</button>
+    <button class="admin-tab-btn" onclick="App.adminTab('customize')" data-tab="customize">🎨 التخصيص</button>
+  </div>
+
+  <!-- CONTENT AREA -->
+  <div class="content-area" id="content-area">
+
+    <!-- ─── HOME ─── -->
+    <section id="page-home" class="page active">
+      <div class="home-hero">
+        <div class="home-avatar-wrap">
+          <div class="home-avatar-ring"></div>
+          <img src="https://iili.io/B04MxcX.md.jpg" alt="ILYA" class="home-avatar">
+        </div>
+        <div class="home-welcome" id="home-welcome">أهلاً بك في خدمات ILYA</div>
+        <div class="home-sub" id="home-sub">منصة الذكاء الاصطناعي المتكاملة للمستقبل</div>
+      </div>
+
+      <div class="home-about glass-card">
+        <div class="home-about-title">عن المنصة</div>
+        <p>منصة ILYA هي بوابتك إلى عالم الذكاء الاصطناعي المتطور. نوفر لك أقوى النماذج والخدمات في مكان واحد متكامل.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card glass-card" onclick="App.navigate('chat')">
+          <div class="service-icon">◈</div>
+          <div class="service-name">الدردشة الذكية</div>
+          <div class="service-desc">تحدث مع نماذج GPT، Gemini وDeepSeek</div>
+        </div>
+        <div class="service-card glass-card" onclick="App.navigate('image')">
+          <div class="service-icon">⬡</div>
+          <div class="service-name">توليد الصور</div>
+          <div class="service-desc">أنشئ صوراً فنية بالذكاء الاصطناعي</div>
+        </div>
+        <div class="service-card glass-card" onclick="App.navigate('video')">
+          <div class="service-icon">▶</div>
+          <div class="service-name">توليد الفيديو</div>
+          <div class="service-desc">حول أفكارك إلى فيديوهات سينمائية</div>
+        </div>
+      </div>
+
+      <div class="home-footer">
+        <div class="home-copyright">جميع الحقوق محفوظة © ILYA Services 2025</div>
+        <a href="https://t.me/swc_t" target="_blank" class="home-channel-link">قناة المبرمج على تيليغرام ↗</a>
+      </div>
+    </section>
+
+    <!-- ─── ACCOUNT ─── -->
+    <section id="page-account" class="page">
+      <div class="page-header-title">حسابي</div>
+      <div class="account-card glass-card">
+        <div class="account-avatar-wrap">
+          <img src="https://iili.io/B04MxcX.md.jpg" alt="avatar" class="account-avatar" id="acc-avatar">
+          <div class="account-avatar-badge">◉</div>
+        </div>
+        <div class="account-fields">
+          <div class="account-field">
+            <div class="field-label">الاسم</div>
+            <div class="field-val editable" id="acc-name" onclick="UI.editField('name')">—</div>
+          </div>
+          <div class="account-field">
+            <div class="field-label">اسم المستخدم</div>
+            <div class="field-val editable" id="acc-user" onclick="UI.editField('username')">—</div>
+          </div>
+          <div class="account-field">
+            <div class="field-label">المعرف (ID)</div>
+            <div class="field-val locked" id="acc-id">—</div>
+          </div>
+          <div class="account-field">
+            <div class="field-label">كلمة المرور</div>
+            <div class="field-val editable" id="acc-pass" onclick="UI.editField('password')">••••••••</div>
+          </div>
+        </div>
+        <button class="glass-btn primary-btn" onclick="UI.saveAccount()">حفظ التغييرات</button>
+      </div>
+    </section>
+
+    <!-- ─── HELP ─── -->
+    <section id="page-help" class="page">
+      <div class="page-header-title">المساعدة</div>
+      <div class="help-items">
+        <div class="help-item glass-card">
+          <div class="help-item-icon">◈</div>
+          <div class="help-item-title">خدمة الدردشة</div>
+          <div class="help-item-body">تحدث مع ذكاء اصطناعي متطور. اختر النموذج المناسب واكتب رسالتك. يدعم النصوص الطويلة والمحادثات المتواصلة.</div>
+        </div>
+        <div class="help-item glass-card">
+          <div class="help-item-icon">⬡</div>
+          <div class="help-item-title">توليد الصور</div>
+          <div class="help-item-body">صف الصورة التي تريدها بالعربية أو الإنجليزية. اختر الجودة والأبعاد. يمكنك أيضاً تعديل صورة موجودة.</div>
+        </div>
+        <div class="help-item glass-card">
+          <div class="help-item-icon">▶</div>
+          <div class="help-item-title">توليد الفيديو</div>
+          <div class="help-item-body">أنشئ فيديو من نص أو حرك صورة. مدة الفيديو 4 ثواني. انتظر حتى اكتمال التوليد.</div>
+        </div>
+        <div class="help-item glass-card">
+          <div class="help-item-icon">◆</div>
+          <div class="help-item-title">هل تحتاج مساعدة؟</div>
+          <div class="help-item-body">تواصل مع فريق الدعم مباشرة عبر قسم الدعم. نرد في أسرع وقت ممكن.</div>
+          <button class="glass-btn secondary-btn" onclick="App.navigate('support')">اذهب للدعم ←</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SUPPORT ─── -->
+    <section id="page-support" class="page">
+      <div class="page-header-title">الدعم الفني</div>
+      <div class="support-container">
+        <!-- Inbox -->
+        <div class="support-inbox glass-card" id="support-inbox">
+          <div class="support-inbox-title">صندوق الوارد</div>
+          <div id="inbox-messages" class="inbox-list">
+            <div class="inbox-empty">لا توجد رسائل</div>
+          </div>
+        </div>
+        <!-- Compose -->
+        <div class="support-compose glass-card">
+          <div class="support-compose-title">إرسال رسالة للدعم</div>
+          <textarea id="support-msg" class="glass-input" placeholder="اكتب رسالتك هنا..." rows="4"></textarea>
+          <div class="support-attach-area">
+            <label class="attach-label" for="support-imgs">
+              <span class="attach-icon">📎</span>
+              <span id="attach-count">إرفاق صور (حد أقصى 2)</span>
+            </label>
+            <input type="file" id="support-imgs" accept="image/*" multiple style="display:none" onchange="UI.handleSupportAttach(event)">
+          </div>
+          <div id="support-previews" class="attach-previews"></div>
+          <button class="glass-btn primary-btn full-width" onclick="UI.sendSupport()">
+            <span class="btn-icon">⬡</span>إرسال الرسالة
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CHAT ─── -->
+    <section id="page-chat" class="page">
+      <!-- Model Selection -->
+      <div id="chat-model-select" class="model-select-view">
+        <div class="page-header-title">اختر نموذج الدردشة</div>
+        <div class="models-grid">
+          <div class="model-card glass-card" onclick="Chat.selectModel('gpt')">
+            <div class="model-icon">⚡</div>
+            <div class="model-name">GPT 5.2 Pro</div>
+            <div class="model-desc">استجابة سريعة وذكاء متطور</div>
+            <div class="model-badge">OpenAI</div>
+          </div>
+          <div class="model-card glass-card" onclick="Chat.selectModel('gemini')">
+            <div class="model-icon">♊</div>
+            <div class="model-name">Gemini 3 PRO</div>
+            <div class="model-desc">نموذج Google المتقدم</div>
+            <div class="model-badge">Google</div>
+          </div>
+          <div class="model-card glass-card" onclick="Chat.selectModel('deepseek')">
+            <div class="model-icon">🔍</div>
+            <div class="model-name">DeepSeek</div>
+            <div class="model-desc">محادثات مع ذاكرة متواصلة</div>
+            <div class="model-badge">DeepSeek</div>
+          </div>
+        </div>
+        <!-- DeepSeek sub-models -->
+        <div id="deepseek-sub" class="deepseek-sub hidden">
+          <div class="page-header-title" style="font-size:1rem">اختر نموذج DeepSeek</div>
+          <div class="models-grid">
+            <div class="model-card glass-card small" onclick="Chat.selectDeepSeek('1')">DeepSeek V3.2</div>
+            <div class="model-card glass-card small" onclick="Chat.selectDeepSeek('2')">DeepSeek R1</div>
+            <div class="model-card glass-card small" onclick="Chat.selectDeepSeek('3')">DeepSeek Coder</div>
+          </div>
+        </div>
+      </div>
+      <!-- Chat Interface -->
+      <div id="chat-interface" class="chat-view hidden">
+        <div class="chat-topbar">
+          <button class="back-btn" onclick="Chat.backToModels()">← تغيير النموذج</button>
+          <div class="chat-model-badge" id="chat-active-model">—</div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-welcome">
+            <div class="chat-welcome-icon">◈</div>
+            <div>ابدأ محادثتك مع الذكاء الاصطناعي</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <button class="chat-send-btn" onclick="Chat.send()">⬆</button>
+          <textarea id="chat-input" class="chat-textarea" placeholder="اكتب رسالتك..." rows="1" onkeydown="Chat.onKey(event)" oninput="Chat.autoResize(this)"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── IMAGE ─── -->
+    <section id="page-image" class="page">
+      <!-- Model Selection -->
+      <div id="image-model-select" class="model-select-view">
+        <div class="page-header-title">توليد الصور — اختر النموذج</div>
+        <div class="models-grid">
+          <div class="model-card glass-card" onclick="ImageSvc.selectModel('nano1')">
+            <div class="model-icon">⬡</div>
+            <div class="model-name">NanoBanana Pro</div>
+            <div class="model-desc">توليد وتعديل — حتى 4K</div>
+            <div class="model-features">✓ إنشاء &nbsp; ✓ تعديل &nbsp; ✓ 4K</div>
+          </div>
+          <div class="model-card glass-card" onclick="ImageSvc.selectModel('nano2')">
+            <div class="model-icon">♊</div>
+            <div class="model-name">NanoBanana PRO+</div>
+            <div class="model-desc">إنشاء وتعديل بنموذج متقدم</div>
+            <div class="model-features">✓ إنشاء &nbsp; ✓ تعديل</div>
+          </div>
+          <div class="model-card glass-card" onclick="ImageSvc.selectModel('nano3')">
+            <div class="model-icon">⚡</div>
+            <div class="model-name">Nano Banana 2</div>
+            <div class="model-desc">سرعة عالية — 2K</div>
+            <div class="model-features">✓ إنشاء &nbsp; 2K فقط</div>
+          </div>
+        </div>
+      </div>
+      <!-- Mode Selection (create / edit) -->
+      <div id="image-mode-select" class="model-select-view hidden">
+        <div class="page-header-title">ماذا تريد؟</div>
+        <div class="models-grid">
+          <div class="model-card glass-card" onclick="ImageSvc.selectMode('create')">
+            <div class="model-icon">✦</div>
+            <div class="model-name">إنشاء صورة</div>
+            <div class="model-desc">من نص إلى صورة</div>
+          </div>
+          <div class="model-card glass-card" onclick="ImageSvc.selectMode('edit')">
+            <div class="model-icon">✎</div>
+            <div class="model-name">تعديل / دمج</div>
+            <div class="model-desc">تعديل صورة موجودة</div>
+          </div>
+        </div>
+        <button class="glass-btn ghost-btn" onclick="ImageSvc.backToModels()">← رجوع</button>
+      </div>
+      <!-- Image Interface -->
+      <div id="image-interface" class="chat-view hidden">
+        <div class="chat-topbar">
+          <button class="back-btn" onclick="ImageSvc.backToModels()">← تغيير النموذج</button>
+          <div class="chat-model-badge" id="img-active-model">—</div>
+        </div>
+        <div class="chat-messages" id="image-messages">
+          <div class="chat-welcome">
+            <div class="chat-welcome-icon">⬡</div>
+            <div>صف الصورة التي تريد إنشاءها</div>
+          </div>
+        </div>
+        <!-- Image upload area (for edit mode) -->
+        <div id="img-upload-area" class="img-upload-area hidden">
+          <label class="attach-label full-width" for="img-files">
+            <span class="attach-icon">📁</span>
+            <span id="img-upload-text">رفع صورة للتعديل</span>
+          </label>
+          <input type="file" id="img-files" accept="image/*" multiple style="display:none" onchange="ImageSvc.handleImgFiles(event)">
+          <div id="img-previews" class="attach-previews"></div>
+        </div>
+        <div class="img-options-row">
+          <select id="img-ratio" class="glass-select" style="display:none">
+            <option value="1:1">1:1</option>
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+            <option value="4:3">4:3</option>
+            <option value="3:4">3:4</option>
+          </select>
+          <select id="img-res" class="glass-select" style="display:none">
+            <option value="2K">2K</option>
+            <option value="4K">4K</option>
+            <option value="1K">1K</option>
+          </select>
+        </div>
+        <div class="chat-input-area">
+          <button class="chat-send-btn" onclick="ImageSvc.send()">⬆</button>
+          <textarea id="image-input" class="chat-textarea" placeholder="صف الصورة..." rows="1" onkeydown="ImageSvc.onKey(event)" oninput="Chat.autoResize(this)"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── VIDEO ─── -->
+    <section id="page-video" class="page">
+      <!-- Model Select -->
+      <div id="video-model-select" class="model-select-view">
+        <div class="page-header-title">توليد الفيديو</div>
+        <div class="models-grid">
+          <div class="model-card glass-card" onclick="VideoSvc.selectModel('sora2')">
+            <div class="model-icon">🎬</div>
+            <div class="model-name">Sora 2</div>
+            <div class="model-desc">توليد فيديو سينمائي 4 ثواني</div>
+            <div class="model-features">✓ نص إلى فيديو &nbsp; ✓ صورة إلى فيديو</div>
+          </div>
+        </div>
+      </div>
+      <!-- Mode Select -->
+      <div id="video-mode-select" class="model-select-view hidden">
+        <div class="page-header-title">نوع التوليد</div>
+        <div class="models-grid">
+          <div class="model-card glass-card" onclick="VideoSvc.selectMode('text')">
+            <div class="model-icon">✦</div>
+            <div class="model-name">نص إلى فيديو</div>
+          </div>
+          <div class="model-card glass-card" onclick="VideoSvc.selectMode('image')">
+            <div class="model-icon">🖼</div>
+            <div class="model-name">صورة إلى فيديو</div>
+          </div>
+        </div>
+        <button class="glass-btn ghost-btn" onclick="VideoSvc.backToModels()">← رجوع</button>
+      </div>
+      <!-- Video Interface -->
+      <div id="video-interface" class="chat-view hidden">
+        <div class="chat-topbar">
+          <button class="back-btn" onclick="VideoSvc.backToModels()">← تغيير النموذج</button>
+          <div class="chat-model-badge" id="vid-active-model">—</div>
+        </div>
+        <div class="chat-messages" id="video-messages">
+          <div class="chat-welcome">
+            <div class="chat-welcome-icon">🎬</div>
+            <div>صف الفيديو الذي تريد إنشاءه</div>
+          </div>
+        </div>
+        <div id="vid-upload-area" class="img-upload-area hidden">
+          <label class="attach-label full-width" for="vid-img-file">
+            <span class="attach-icon">📁</span>
+            <span>رفع صورة للتحريك</span>
+          </label>
+          <input type="file" id="vid-img-file" accept="image/*" style="display:none" onchange="VideoSvc.handleImgFile(event)">
+          <div id="vid-preview" class="attach-previews"></div>
+        </div>
+        <div class="img-options-row">
+          <select id="vid-aspect" class="glass-select">
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+            <option value="1:1">1:1</option>
+          </select>
+        </div>
+        <div class="chat-input-area">
+          <button class="chat-send-btn" onclick="VideoSvc.send()">⬆</button>
+          <textarea id="video-input" class="chat-textarea" placeholder="صف الفيديو..." rows="1" onkeydown="VideoSvc.onKey(event)" oninput="Chat.autoResize(this)"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── ADMIN ─── -->
+    <section id="page-admin" class="page">
+      <div id="admin-stats" class="admin-panel active">
+        <div class="page-header-title">📊 الإحصائيات</div>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card glass-card"><div class="stat-num" id="stat-visitors">—</div><div class="stat-label">إجمالي الزيارات</div></div>
+          <div class="stat-card glass-card"><div class="stat-num" id="stat-users">—</div><div class="stat-label">المستخدمون</div></div>
+          <div class="stat-card glass-card"><div class="stat-num" id="stat-chat-uses">—</div><div class="stat-label">استخدام الدردشة</div></div>
+          <div class="stat-card glass-card"><div class="stat-num" id="stat-img-uses">—</div><div class="stat-label">توليد الصور</div></div>
+          <div class="stat-card glass-card"><div class="stat-num" id="stat-vid-uses">—</div><div class="stat-label">توليد الفيديو</div></div>
+          <div class="stat-card glass-card"><div class="stat-num" id="stat-support-msgs">—</div><div class="stat-label">رسائل الدعم</div></div>
+        </div>
+      </div>
+      <div id="admin-users" class="admin-panel">
+        <div class="page-header-title">👥 المستخدمون</div>
+        <div id="users-list" class="users-list"></div>
+      </div>
+      <div id="admin-blocked" class="admin-panel">
+        <div class="page-header-title">🚫 المحظورون</div>
+        <div id="blocked-list" class="users-list"></div>
+      </div>
+      <div id="admin-messages" class="admin-panel">
+        <div class="page-header-title">📨 رسائل الدعم</div>
+        <div id="admin-msgs-list" class="messages-list"></div>
+      </div>
+      <div id="admin-customize" class="admin-panel">
+        <div class="page-header-title">🎨 تخصيص الموقع</div>
+        <div class="customize-grid">
+          <div class="customize-group glass-card">
+            <div class="customize-group-title">خدمات الموقع</div>
+            <div class="toggle-row"><span>خدمة الدردشة</span><label class="toggle"><input type="checkbox" id="toggle-chat" checked onchange="Admin.toggleService('chat',this.checked)"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>توليد الصور</span><label class="toggle"><input type="checkbox" id="toggle-image" checked onchange="Admin.toggleService('image',this.checked)"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>توليد الفيديو</span><label class="toggle"><input type="checkbox" id="toggle-video" checked onchange="Admin.toggleService('video',this.checked)"><span class="toggle-slider"></span></label></div>
+          </div>
+          <div class="customize-group glass-card">
+            <div class="customize-group-title">النصوص والرسائل</div>
+            <div class="input-group"><label class="field-label">رسالة الترحيب</label><input type="text" id="custom-welcome" class="glass-input" placeholder="أهلاً بك في خدمات ILYA"></div>
+            <div class="input-group"><label class="field-label">رسالة الحقوق</label><input type="text" id="custom-copyright" class="glass-input" placeholder="جميع الحقوق محفوظة"></div>
+            <div class="input-group"><label class="field-label">اسم الموقع</label><input type="text" id="custom-site-name" class="glass-input" placeholder="ILYA Services"></div>
+            <button class="glass-btn primary-btn" onclick="Admin.saveCustomization()">حفظ التخصيص</button>
+          </div>
+          <div class="customize-group glass-card">
+            <div class="customize-group-title">النماذج المتاحة</div>
+            <div class="toggle-row"><span>GPT 5.2 Pro</span><label class="toggle"><input type="checkbox" id="toggle-gpt" checked onchange="Admin.toggleModel('gpt',this.checked)"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>Gemini 3 PRO</span><label class="toggle"><input type="checkbox" id="toggle-gemini" checked onchange="Admin.toggleModel('gemini',this.checked)"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>DeepSeek</span><label class="toggle"><input type="checkbox" id="toggle-deepseek" checked onchange="Admin.toggleModel('deepseek',this.checked)"><span class="toggle-slider"></span></label></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="bnav-btn active" onclick="App.navigate('home')" data-page="home">
+      <span class="bnav-icon">⌂</span>
+      <span class="bnav-label">الرئيسية</span>
+    </button>
+    <button class="bnav-btn" onclick="App.navigate('chat')" data-page="chat">
+      <span class="bnav-icon">◈</span>
+      <span class="bnav-label">دردشة</span>
+    </button>
+    <button class="bnav-btn" onclick="App.navigate('image')" data-page="image">
+      <span class="bnav-icon">⬡</span>
+      <span class="bnav-label">صور</span>
+    </button>
+    <button class="bnav-btn" onclick="App.navigate('video')" data-page="video">
+      <span class="bnav-icon">▶</span>
+      <span class="bnav-label">فيديو</span>
+    </button>
+    <button class="bnav-btn" onclick="App.navigate('support')" data-page="support">
+      <span class="bnav-icon">◆</span>
+      <span class="bnav-label">دعم</span>
+    </button>
+  </nav>
+
+</div><!-- /screen-app -->
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<!-- MODAL -->
+<div id="modal-overlay" class="modal-overlay hidden" onclick="UI.closeModal()">
+  <div class="modal-box glass-card" onclick="e=>e.stopPropagation()">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/canvas.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/services/chat.js"></script>
+<script src="js/services/image.js"></script>
+<script src="js/services/video.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
