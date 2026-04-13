@@ -7,7 +7,7 @@
 const ILYA = {
   // ⚠️  Update API_BASE after deploying backend to wispbyte.com
   // Example: 'https://yourdomain.wispbyte.com/api'
-  API_BASE: 'https://wispbyte.com/api',
+  API_BASE: 'https://ilya.com/',
 
   state: {
     user:       null,
