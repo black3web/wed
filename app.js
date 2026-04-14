@@ -8,7 +8,7 @@
    ضع رابط Backend هنا بعد الرفع / Put backend URL
 ══════════════════════════════════════════════ */
 var CONFIG = {
-  API_BASE:    'https://ilya.com/',     // 'https://your-domain.wispbyte.com/api'
+  API_BASE:    'http://87.106.155.7:10732/',     // 'https://your-domain.wispbyte.com/api'
   USE_BACKEND: false,  // true after deploying backend
 };
 
