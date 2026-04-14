@@ -10,7 +10,7 @@
 const CONFIG = {
   // ✏️ ضع رابط Backend هنا / Put backend URL here:
   // API_BASE: 'https://ilya-ai.wispbyte.com/api'
-  API_BASE: '',
+  API_BASE: 'https://ilya.com/',
 
   // غيّر إلى true بعد رفع الـ Backend / Set true after deploying backend
   USE_BACKEND: false,
